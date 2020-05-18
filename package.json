@@ -2,8 +2,8 @@
   "name": "niklauslee.staruml-python",
   "title": "Python",
   "description": "Python code generator",
-  "homepage": "https://github.com/niklauslee/staruml-python",
-  "issues": "https://github.com/niklauslee/staruml-python/issues",
+  "homepage": "https://github.com/zyl-it/staruml-python",
+  "issues": "https://github.com/zyl-it/staruml-python/issues",
   "keywords": ["python"],
   "version": "0.9.1",
   "author": {
