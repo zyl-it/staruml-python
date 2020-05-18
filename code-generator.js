@@ -183,6 +183,9 @@ class PythonCodeGenerator {
       var params = elem.getNonReturnParameters()
       var paramStr = params.map(function (p) { return p.name }).join(', ')
 
+      if (elem.isAbstract){
+        codeWriter.writeLine('@abstractmethod')
+      }
       if (elem.isStatic) {
         codeWriter.writeLine('@classmethod')
         codeWriter.writeLine(line + '(cls, ' + paramStr + '):')
@@ -249,12 +252,18 @@ class PythonCodeGenerator {
     }
 
     // Class
-    line = 'class ' + elem.name
+    line = 'class ' + elem.name + '('
+    
+    //abstract class
+    if (elem.isAbstract) {
+      line = 'from abc import ABCMeta, abstractmethod \n\n\n' + line
+      line += '(metaclass=ABCMeta,'
 
     // Inherits
     if (_inherits.length > 0) {
-      line += '(' + _inherits.map(function (e) { return e.name }).join(', ') + ')'
-    }
+      line +=  _inherits.map(function (e) { return e.name }).join(', ') + ')'
+    }  else {
+      line += 'object)'
 
     codeWriter.writeLine(line + ':')
     codeWriter.indent()
@@ -313,7 +322,7 @@ class PythonCodeGenerator {
 
     // Class
     } else if (elem instanceof type.UMLClass || elem instanceof type.UMLInterface) {
-      fullPath = basePath + '/' + elem.name + '.py'
+      fullPath = basePath + '/' + elem.name.low() + '.py'
       codeWriter = new codegen.CodeWriter(this.getIndentString(options))
       codeWriter.writeLine(options.installPath)
       codeWriter.writeLine('#-*- coding: utf-8 -*-')
